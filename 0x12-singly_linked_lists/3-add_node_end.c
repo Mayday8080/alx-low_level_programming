@@ -1,61 +1,51 @@
 #include "lists.h"
-/**
- * _strlen - determines the string length
- * @str: given string
- *
- * Return: an integer length
- */
-int _strlen(const char *str)
-{
-	int length = 0;
 
-	while (str)
-		length++;
-	return (length);
+/**
+ * len - Calculates the length of a string.
+ * @str: Constant string
+ * Return: The length of the string
+ */
+
+int len(const char *str)
+{
+	int count;
+
+	if (str == NULL)
+		return (0);
+	for (count = 0; str[count] != '\0'; count++)
+		;
+	return (count);
 }
 
 /**
- * add_node_end - add a node at the end of list
- * @head: the head of the list
- * @str: a given string
+ * add_node_end - Function that adds a new node at the end of a list_t list.
  *
- * Return: a pointer to the new element
+ * @head: This is the input linked list
+ * @str: This is the string take in my linked list.
+ *
+ * Return: the address of the new element, or NULL if it failed.
  */
+
 list_t *add_node_end(list_t **head, const char *str)
 {
-	list_t *new_node;
-	list_t *tmp;
-	tmp = *head;
+	list_t *new_node = (list_t *) malloc(sizeof(list_t));
+	list_t *last = *head;
 
-	if (!str)
-		return (NULL);
-
-	/* nod memeorty allocation */
-	new_node = malloc(sizeof(list_t));
-
-	if (new_node == NULL)
-		return (NULL);
-	/* Nod creation and initialization */
-	new_node->next = NULL;
-	new_node->str = strdup(str);
-	/* check memory allocation for strdup */
-	if (new_node->str == NULL)
+	if (new_node == NULL || str == NULL)
 	{
 		free(new_node);
-		return (NULL);
+		return NULL;
 	}
-	new_node->len = _strlen(str);
-	/* checking if there is more than 2 elements(list exist) */
+	new_node->str = strdup(str);
+	new_node->len = len(str);
+	new_node->next = NULL;
 	if (*head == NULL)
 	{
 		*head = new_node;
-		return (new_node);
+		return (*head);
 	}
-	/* searcing for n-1 last element of the list where to point */
-	while (tmp->next)
-	{
-		tmp = tmp->next;
-	tmp->next = new_node;
-	}
-	return (new_node);
+	while (last->next != NULL)
+		last = last->next;
+	last->next = new_node;
+	return (*head);
 }
